@@ -23,6 +23,7 @@ from anthropic.types.beta import (
 )
 
 from tools import BashTool, ComputerTool, EditTool, ToolCollection, ToolResult
+from logger import trajectory_logger
 
 BETA_FLAG = "computer-use-2024-10-22"
 
@@ -95,6 +96,7 @@ SYSTEM_PROMPT = f"""<SYSTEM_CAPABILITY>
 * The current date is {datetime.today().strftime('%A, %B %-d, %Y')}.
 </SYSTEM_CAPABILITY>"""
 
+
 async def sampling_loop(
     *,
     model: str,
@@ -111,6 +113,9 @@ async def sampling_loop(
     """
     Agentic sampling loop for the assistant/tool interaction of computer use.
     """
+    # Start new trajectory
+    trajectory_logger.start_trajectory()
+
     tool_collection = ToolCollection(
         ComputerTool(),
         BashTool(),
@@ -132,9 +137,6 @@ async def sampling_loop(
             client = AnthropicBedrock()
 
         # Call the API
-        # we use raw_response to provide debug information to streamlit. Your
-        # implementation may be able call the SDK directly with:
-        # `response = client.messages.create(...)` instead.
         raw_response = client.beta.messages.with_raw_response.create(
             max_tokens=max_tokens,
             messages=messages,
@@ -145,8 +147,13 @@ async def sampling_loop(
         )
 
         api_response_callback(cast(APIResponse[BetaMessage], raw_response))
-
         response = raw_response.parse()
+
+        # Log the step
+        trajectory_logger.log_step(
+            messages=messages,
+            response=response.model_dump(),
+        )
 
         messages.append(
             {
@@ -155,19 +162,36 @@ async def sampling_loop(
             }
         )
 
+        screenshots = []
         tool_result_content: list[BetaToolResultBlockParam] = []
+
         for content_block in cast(list[BetaContentBlock], response.content):
-            print("CONTENT", content_block)
             output_callback(content_block)
             if content_block.type == "tool_use":
                 result = await tool_collection.run(
                     name=content_block.name,
                     tool_input=cast(dict[str, Any], content_block.input),
                 )
+
+                # If there's a screenshot, save it and get the path
+                if hasattr(result, "base64_image") and result.base64_image:
+                    screenshot_path = trajectory_logger.save_screenshot(
+                        result.base64_image
+                    )
+                    screenshots.append(screenshot_path)
+
                 tool_result_content.append(
                     _make_api_tool_result(result, content_block.id)
                 )
                 tool_output_callback(result, content_block.id)
+
+        # Update the step log with screenshots if any were taken
+        if screenshots:
+            trajectory_logger.log_step(
+                messages=messages,
+                response=response.model_dump(),
+                screenshots=screenshots,
+            )
 
         if not tool_result_content:
             return messages
