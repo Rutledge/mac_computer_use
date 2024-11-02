@@ -28,7 +28,7 @@
 1. Clone the repository and navigate to it:
 
 ```bash
-git clone https://github.com/deedy/mac_computer_use.git
+git clone https://github.com/Rutledge/mac_computer_use.git
 cd mac_computer_use
 ```
 
