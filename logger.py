@@ -31,7 +31,11 @@ class TrajectoryLogger:
 
     def start_trajectory(self) -> str:
         """Start a new trajectory and return its ID"""
-        self.current_trajectory = f"t{uuid4().hex[:8]}"
+        # Get existing trajectory directories and find next number
+        existing = [d for d in self.base_dir.glob("t*") if d.is_dir()]
+        next_num = len(existing) + 1
+
+        self.current_trajectory = f"t{next_num:08d}"
         self.step_counter = 0
         self.screenshot_counter = 0
 
