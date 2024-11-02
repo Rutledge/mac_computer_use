@@ -49,23 +49,26 @@ def analyze_trajectory_and_improve_prompt(
     # Prepare trajectory summary for LLM analysis
     trajectory_summary = _create_trajectory_summary(steps_data)
 
-    # Get the last screenshot from the trajectory
+    # Get the last 3 screenshots from the trajectory
     trajectory_screenshots = Path(trajectory_dir) / "screenshots"
     screenshot_files = sorted(trajectory_screenshots.glob("*.png"))
 
-    image_data = None
+    image_data_list = []
     if screenshot_files:
-        last_screenshot = screenshot_files[-1]
+        # Take last 3 screenshots (or all if less than 3)
+        last_screenshots = screenshot_files[-3:]
 
-        # Read and encode the image
-        with open(last_screenshot, "rb") as img_file:
-            image_data = base64.b64encode(img_file.read()).decode()
+        # Read and encode each image
+        for screenshot in last_screenshots:
+            with open(screenshot, "rb") as img_file:
+                image_data = base64.b64encode(img_file.read()).decode()
+                image_data_list.append(image_data)
 
     # Ask LLM to analyze the trajectory
     print("\nRequesting LLM analysis...")
     analysis = _get_llm_analysis(
         trajectory_summary=trajectory_summary,
-        image_data=image_data,
+        image_data_list=image_data_list,
         original_prompt=original_prompt,
         client=anthropic_client,
     )
@@ -123,7 +126,10 @@ def _extract_tool_usage(messages: List[Dict[str, Any]]) -> Dict[str, int]:
 
 
 def _get_llm_analysis(
-    trajectory_summary: str, image_data: str, original_prompt: str, client: Any
+    trajectory_summary: str,
+    image_data_list: List[str],
+    original_prompt: str,
+    client: Any,
 ) -> Any:
     """Uses LLM to analyze trajectory and identify improvements."""
 
@@ -142,8 +148,8 @@ def _get_llm_analysis(
     # Prepare the message content
     message_content = [{"type": "text", "text": analysis_prompt}]
 
-    # Add image if available
-    if image_data:
+    # Add images if available
+    for image_data in image_data_list:
         message_content.insert(
             0,
             {
@@ -180,7 +186,7 @@ def _get_llm_analysis(
     return json.loads(json_str)
 
 
-if __name__ == "__main__":
+def main():
     from anthropic import Anthropic
     from dotenv import load_dotenv
     import glob
@@ -211,3 +217,7 @@ if __name__ == "__main__":
     os.makedirs("prompts", exist_ok=True)
     with open(f"prompts/p{trajectory_num}.txt", "w") as f:
         f.write(response["improved_prompt"])
+
+
+if __name__ == "__main__":
+    main()
