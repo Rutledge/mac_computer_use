@@ -46,7 +46,7 @@ PROVIDER_TO_DEFAULT_MODEL_NAME: dict[APIProvider, str] = {
 # environment it is running in, and to provide any additional information that may be
 # helpful for the task at hand.
 # SYSTEM_PROMPT = f"""<SYSTEM_CAPABILITY>
-# * You are utilizing a macOS Sonoma 15.7 environment using {platform.machine()} architecture with internet access.
+# * You are utilizing a macOS Sequoia 15.1 environment using {platform.machine()} architecture with internet access.
 # * You can install applications using homebrew with your bash tool. Use curl instead of wget.
 # * To open Chrome, please just click on the Chrome icon in the Dock or use Spotlight.
 # * Using bash tool you can start GUI applications. GUI apps can be launched directly or with `open -a "Application Name"`. GUI apps will appear natively within macOS, but they may take some time to appear. Take a screenshot to confirm it did.
@@ -60,7 +60,7 @@ PROVIDER_TO_DEFAULT_MODEL_NAME: dict[APIProvider, str] = {
 # * If the item you are looking at is a pdf, if after taking a single screenshot of the pdf it seems that you want to read the entire document instead of trying to continue to read the pdf from your screenshots + navigation, determine the URL, use curl to download the pdf, install and use pdftotext (available via homebrew) to convert it to a text file, and then read that text file directly with your StrReplaceEditTool.
 # </IMPORTANT>"""
 SYSTEM_PROMPT = f"""<SYSTEM_CAPABILITY>
-* You are utilizing a macOS Sonoma 15.7 environment using {platform.machine()} architecture with command line internet access.
+* You are utilizing a macOS Sequoia 15.1 environment using {platform.machine()} architecture with command line internet access.
 * Package management:
   - Use homebrew for package installation
   - Use curl for HTTP requests
