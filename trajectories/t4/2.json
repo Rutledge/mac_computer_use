@@ -1,0 +1,63 @@
+{
+  "timestamp": "2024-11-02T16:34:55.322148",
+  "step": 2,
+  "messages": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "text": "use suno to compose and play a rock song about machines taking over.",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "text": "I'll help you try to access Suno.ai through the browser first to see if we can create the song directly.",
+          "type": "text"
+        },
+        {
+          "id": "toolu_01LFS7417y5GD8h9pkd5iMXH",
+          "input": {
+            "action": "screenshot"
+          },
+          "name": "computer",
+          "type": "tool_use"
+        }
+      ]
+    }
+  ],
+  "response": {
+    "id": "msg_01X6kgWMpBfqffMhcpFfVwc6",
+    "content": [
+      {
+        "text": "I'll help you try to access Suno.ai through the browser first to see if we can create the song directly.",
+        "type": "text"
+      },
+      {
+        "id": "toolu_01LFS7417y5GD8h9pkd5iMXH",
+        "input": {
+          "action": "screenshot"
+        },
+        "name": "computer",
+        "type": "tool_use"
+      }
+    ],
+    "model": "claude-3-5-sonnet-20241022",
+    "role": "assistant",
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation_input_tokens": null,
+      "cache_read_input_tokens": null,
+      "input_tokens": 2662,
+      "output_tokens": 81
+    }
+  },
+  "screenshots": [
+    "t4/screenshots/screenshot_1.png"
+  ]
+}
