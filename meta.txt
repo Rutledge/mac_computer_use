@@ -47,21 +47,32 @@ Your objective is to thoroughly analyze this interaction and provide improvement
 
 Before providing your final output, wrap your analysis inside <prompt_analysis> tags to break down your thought process and show your reasoning. This will ensure a thorough interpretation of the data and justify your improvements.
 
-After your analysis, present your findings and improvements in the following JSON format, enclosed by <json_output> tags:
+After your analysis, present your findings and improvements in the following JSON formats and tags:
+
+<analysis>
+"task_completion": {
+    "success": "Boolean indicating if task was completed successfully",
+    "failure_reason": "If task failed, explanation of why"
+},
+"mistakes": [
+    "List of identified mistakes and issues in the trajectory"
+],
+"misunderstandings": [
+    "List of any misinterpretations or confusion points"
+],
+"inefficiencies": [
+    "List of identified inefficient actions or approaches"
+],
+"prompt_issues": [
+    "List of issues identified in the original prompt"
+],
+"key_observations": [
+    "Important insights about the agent's behavior and performance"
+]
+</analysis>
 
 <json_output>
 {
-  "analysis": {
-    "mistakes": [
-      "List of identified mistakes and issues in the trajectory"
-    ],
-    "misunderstandings": [
-      "List of any misinterpretations or confusion points"
-    ],
-    "inefficiencies": [
-      "List of identified inefficient actions or approaches"
-    ]
-  },
   "improved_prompt": "Your improved version of the prompt here",
   "improvements": "List of specific changes made to the prompt and expected improvements"
 }

@@ -35,7 +35,7 @@ class TrajectoryLogger:
         existing = [d for d in self.base_dir.glob("t*") if d.is_dir()]
         next_num = len(existing) + 1
 
-        self.current_trajectory = f"t{next_num:08d}"
+        self.current_trajectory = f"t{next_num}"
         self.step_counter = 0
         self.screenshot_counter = 0
 

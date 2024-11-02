@@ -1,0 +1,16 @@
+Navigate to GitHub.com using the Chrome browser by following these steps:
+1. Click + button to create new tab.
+2. Click the address bar of Chrome
+3. Type 'github.com'
+4. Press Enter to navigate directly to the site
+5. Verify that GitHub's homepage has loaded successfully by checking for the GitHub logo or navigation elements
+
+Success criteria:
+- Direct navigation to github.com without using search
+- GitHub homepage is successfully loaded
+- Take only necessary screenshots to verify task completion
+
+If any errors occur during navigation:
+- Check if the internet connection is active
+- Verify the URL was typed correctly
+- Report any error messages displayed

@@ -46,13 +46,8 @@ def analyze_trajectory_and_improve_prompt(
         with open(step_file) as f:
             steps_data.append(json.load(f))
 
-    # Add print for steps data
-    print(f"Loaded {len(steps_data)} step files")
-
     # Prepare trajectory summary for LLM analysis
     trajectory_summary = _create_trajectory_summary(steps_data)
-    print("\nTrajectory Summary:")
-    print(trajectory_summary)
 
     # Get the last screenshot from the trajectory
     trajectory_screenshots = Path(trajectory_dir) / "screenshots"
@@ -164,41 +159,55 @@ def _get_llm_analysis(
     response = client.messages.create(
         model="claude-3-5-sonnet-20241022",
         max_tokens=2000,
-        messages=[{"role": "user", "content": message_content}],
+        messages=[
+            {"role": "user", "content": message_content},
+        ],
     )
 
     # Parse the JSON response
-    analysis_text = response.content[0].text
+    response = response.content[0].text
 
     # Extract JSON between <json_output> tags
     start_tag = "<json_output>"
     end_tag = "</json_output>"
-    json_str = analysis_text[
-        analysis_text.find(start_tag) + len(start_tag) : analysis_text.find(end_tag)
-    ]
-    analysis_data = json.loads(json_str)
 
-    return analysis_data
+    start_index = response.find(start_tag)
+    end_index = response.find(end_tag)
+    json_str = response[start_index + len(start_tag) : end_index]
+    json_str = json_str.replace("\n", " ")
+    json_str = json_str.strip()
+
+    return json.loads(json_str)
 
 
 if __name__ == "__main__":
-
     from anthropic import Anthropic
-
     from dotenv import load_dotenv
+    import glob
 
     load_dotenv()
 
-    trajectory_dir = "trajectories/t1"
-    original_prompt = ""
+    # Get latest trajectory directory
+    trajectory_dirs = glob.glob("trajectories/t*")
+    latest_trajectory = max(trajectory_dirs)
+    trajectory_num = latest_trajectory.split("/")[-1].replace("t", "")
 
+    # Load previous prompt if it exists
+    latest_prompt = ""
+    path_latest_prompt = f"prompts/p{int(trajectory_num)-1}.txt"
+    if os.path.exists(path_latest_prompt):
+        with open(path_latest_prompt) as f:
+            latest_prompt = f.read()
+
+    # Analyze trajectory and get improved prompt
     client = Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
-
-    improved_prompt = analyze_trajectory_and_improve_prompt(
-        trajectory_path=trajectory_dir,
-        original_prompt=original_prompt,
+    response = analyze_trajectory_and_improve_prompt(
+        trajectory_path=latest_trajectory,
+        original_prompt=latest_prompt,
         anthropic_client=client,
     )
 
-    print("\nImproved prompt:")
-    print(improved_prompt["improved_prompt"])
+    # Save improved prompt
+    os.makedirs("prompts", exist_ok=True)
+    with open(f"prompts/p{trajectory_num}.txt", "w") as f:
+        f.write(response["improved_prompt"])
