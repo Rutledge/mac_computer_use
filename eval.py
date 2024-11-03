@@ -6,7 +6,7 @@ import base64
 from datetime import datetime
 
 
-def analyze_trajectory_and_improve_prompt(
+def analyze_trajectory_and_evaluate(
     trajectory_path: str,
     original_prompt: str,
     anthropic_client: Any,
@@ -103,8 +103,8 @@ def _create_trajectory_summary(steps_data: List[Dict[str, Any]]) -> str:
     print(f"Eval Total Input Tokens: {sum_input_tokens}")
     print(f"Eval Total Output Tokens: {sum_output_tokens}")
 
-    print(f"Eval Total Input Tokens Cost: ${sum_input_tokens*0.003/1000}")
-    print(f"Eval Total Output Tokens Cost: ${sum_output_tokens*0.015/1000}")
+    print(f"Eval Total Input Tokens Cost: ${round(sum_input_tokens*0.003/1000, 4)}")
+    print(f"Eval Total Output Tokens Cost: ${round(sum_output_tokens*0.015/1000, 4)}")
 
     return json.dumps(summary, indent=2)
 
@@ -228,7 +228,7 @@ def main():
 
         # Analyze trajectory and get improved prompt
         client = Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
-        response = analyze_trajectory_and_improve_prompt(
+        response = analyze_trajectory_and_evaluate(
             trajectory_path=trajectory_dir,
             original_prompt=latest_prompt,
             anthropic_client=client,
