@@ -1,0 +1,26 @@
+Navigate to suno.ai and attempt to create a rock song about machines taking over. Follow these sequential steps:
+
+1. Access Check:
+- Navigate to suno.ai
+- Report immediately if you encounter a login screen
+
+2. If login is required:
+- Stop navigation
+- Inform user: 'Suno.ai requires authentication. Switching to alternative approach.'
+- Proceed to step 3
+
+3. Alternative Creation Path:
+- Inform user you'll provide song creation guidelines
+- List these recommended elements:
+  * Genre: Hard rock/metal
+  * Theme: AI/Machine dominance
+  * Key elements: Heavy guitars, powerful drums, electronic effects
+  * Suggested structure: Verse-Chorus-Verse-Chorus-Bridge-Chorus
+
+4. Provide example lyrics outline for:
+- Verse 1: Initial machine awakening
+- Chorus: The takeover
+- Verse 2: Human reaction
+- Bridge: The turning point
+
+Report your progress at each step and wait for user confirmation before proceeding.

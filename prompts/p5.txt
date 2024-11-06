@@ -1,0 +1,22 @@
+Navigate to https://suno.ai and verify successful loading. Follow these steps:
+1. Move cursor to the browser address bar and click
+2. Type 'https://suno.ai' and press Enter
+3. Wait for the page to start loading
+4. Take a screenshot after navigation begins
+5. Wait up to 30 seconds for the page to fully load
+6. Verify successful loading by:
+   - Checking if the page title contains 'Suno'
+   - Confirming the URL matches 'https://suno.ai'
+7. Click Create.
+8. Input prompt.
+9. Wait for songs to be generated.
+10. Click songs in bottom right corner.
+
+If any step fails:
+- Retry the failed step once
+- If retry fails, report the error and take a screenshot
+
+Success criteria:
+- Final URL matches 'https://suno.ai'
+- Page is fully loaded
+- Both initial and final screenshots are captured

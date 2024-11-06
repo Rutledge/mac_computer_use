@@ -11,6 +11,7 @@ from enum import StrEnum
 from functools import partial
 from pathlib import PosixPath
 from typing import cast
+import glob
 
 import streamlit as st
 from anthropic import APIResponse
@@ -82,7 +83,14 @@ def setup_state():
     if "only_n_most_recent_images" not in st.session_state:
         st.session_state.only_n_most_recent_images = 10
     if "custom_system_prompt" not in st.session_state:
-        st.session_state.custom_system_prompt = load_from_storage("system_prompt") or ""
+        # Get the latest prompt file from prompts directory
+        prompt_files = glob.glob("prompts/*")
+        if prompt_files:
+            latest_prompt = max(prompt_files)
+            with open(latest_prompt, "r") as f:
+                st.session_state.custom_system_prompt = f.read()
+        else:
+            st.session_state.custom_system_prompt = ""
     if "hide_images" not in st.session_state:
         st.session_state.hide_images = False
 
@@ -101,7 +109,9 @@ async def main():
 
     st.title("Claude Computer Use for Mac")
 
-    st.markdown("""This is from [Mac Computer Use](https://github.com/deedy/mac_computer_use), a fork of [Anthropic Computer Use](https://github.com/anthropics/anthropic-quickstarts/blob/main/computer-use-demo/README.md) to work natively on Mac.""")
+    st.markdown(
+        """This is from [Mac Computer Use](https://github.com/deedy/mac_computer_use), a fork of [Anthropic Computer Use](https://github.com/anthropics/anthropic-quickstarts/blob/main/computer-use-demo/README.md) to work natively on Mac."""
+    )
 
     with st.sidebar:
 
